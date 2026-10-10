@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:oklch(0.1 0.005 85);font-family:'Instrument Sans',system-ui,sans-serif;color:oklch(0.95 0.005 85);-webkit-font-smoothing:antialiased}
+a{color:oklch(0.72 0.15 45)}a:hover{color:oklch(0.8 0.13 50)}
+input{font-family:inherit}
+*::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;box-sizing:border-box">
+<div style="width:390px;height:844px;border-radius:54px;background:oklch(0.06 0 0);padding:10px;box-sizing:content-box;box-shadow:0 0 0 1px oklch(0.28 0.006 85),0 30px 80px oklch(0 0 0 / 0.5)">
+<div style="position:relative;width:390px;height:844px;border-radius:44px;overflow:hidden;background:oklch(0.16 0.006 85);display:flex;flex-direction:column">
+
+<div style="height:50px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 34px;font-size:15px;font-weight:600">
+<span>9:41</span>
+<div style="width:110px;height:30px;border-radius:20px;background:oklch(0.06 0 0);position:absolute;left:140px;top:10px"></div>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:12px">5G ▮▮▮</span>
+</div>
+
+<div style="flex:1;overflow-y:auto;padding:4px 20px 24px">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px">
+<div style="font-size:13px;color:oklch(0.7 0.01 85)">Friday, Oct 9</div>
+<div style="width:34px;height:34px;border-radius:50%;background:oklch(0.28 0.006 85);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">LB</div>
+</div>
+
+<div style="background:oklch(0.22 0.006 85);border:1px solid oklch(0.3 0.006 85);color:oklch(0.96 0.004 85);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start">
+<div>
+<div style="font-size:13px;color:oklch(0.75 0.01 85)">2008 · 4.8i · Denver</div>
+<div style="font-size:28px;font-weight:600;letter-spacing:-0.02em;margin-top:2px">BMW X5</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid oklch(0.45 0.01 85);border-radius:6px;padding:4px 8px">BNEB07</div>
+</div>
+<div style="height:120px;border-radius:14px;background:repeating-linear-gradient(135deg,oklch(0.28 0.01 85) 0 8px,oklch(0.25 0.01 85) 8px 16px);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85)">car photo</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div>
+<div style="font-size:12px;color:oklch(0.72 0.01 85)">Registered through</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:18px;margin-top:2px">Jul 31, 2027</div>
+</div>
+<div>
+<div style="font-size:12px;color:oklch(0.72 0.01 85)">Est. value (Carvana)</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:18px;margin-top:2px">$1,900</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font-size:18px;font-weight:600;letter-spacing:-0.01em">Coming up</div>
+<button onClick="{{ goReminders }}" style="border:none;background:none;font:inherit;font-size:14px;color:oklch(0.72 0.15 45);cursor:pointer;padding:0">See all</button>
+</div>
+<sc-for list="{{ upcoming }}" as="r" hint-placeholder-count="3">
+<div style="background:oklch(0.21 0.006 85);border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid oklch(0.27 0.006 85)">
+<div style="min-width:0">
+<div style="font-size:15px;font-weight:600">{{ r.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:2px">{{ r.detail }}</div>
+</div>
+<div style="flex:none;font-size:13px;font-weight:600;padding:5px 10px;border-radius:999px;background:{{ r.bg }};color:{{ r.fg }}">{{ r.due }}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font-size:18px;font-weight:600;letter-spacing:-0.01em">Glovebox</div>
+<button onClick="{{ goDocs }}" style="border:none;background:none;font:inherit;font-size:14px;color:oklch(0.72 0.15 45);cursor:pointer;padding:0">All documents</button>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ pinned }}" as="d" hint-placeholder-count="4">
+<button onClick="{{ d.open }}" style="text-align:left;font:inherit;color:inherit;cursor:pointer;background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:18px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85);text-transform:uppercase;letter-spacing:0.04em">{{ d.cat }}</div>
+<div>
+<div style="font-size:15px;font-weight:600">{{ d.short }}</div>
+<div style="font-size:12px;color:{{ d.metaColor }};margin-top:2px">{{ d.meta }}</div>
+</div>
+</button>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:18px;font-weight:600;letter-spacing:-0.01em">Last service</div>
+<div style="background:oklch(0.21 0.006 85);border-radius:16px;padding:14px 16px;border:1px solid oklch(0.27 0.006 85);display:flex;justify-content:space-between;align-items:center">
+<div>
+<div style="font-size:15px;font-weight:600">{{ last.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:2px">{{ last.date }} · {{ last.shop }}</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:14px">{{ last.costFmt }}</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDocs }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="padding-top:8px;display:flex;justify-content:space-between;align-items:center">
+<div style="font-size:30px;font-weight:600;letter-spacing:-0.02em">Documents</div>
+<button style="border:none;border-radius:999px;background:#e0602c;color:oklch(0.14 0.01 50);font:inherit;font-size:14px;font-weight:600;padding:9px 14px;cursor:pointer">+ Scan</button>
+</div>
+<div style="display:flex;gap:8px;overflow-x:auto;margin:0 -20px;padding:0 20px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+<button onClick="{{ c.select }}" style="flex:none;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};border-radius:999px;padding:7px 13px;font:inherit;font-size:14px;cursor:pointer">{{ c.label }}</button>
+</sc-for>
+</div>
+<div style="background:oklch(0.21 0.006 85);border-radius:18px;border:1px solid oklch(0.27 0.006 85);display:flex;flex-direction:column">
+<sc-for list="{{ docList }}" as="d" hint-placeholder-count="6">
+<button onClick="{{ d.open }}" style="text-align:left;font:inherit;color:inherit;cursor:pointer;background:none;border:none;border-top:{{ d.divider }};padding:13px 16px;display:flex;align-items:center;gap:14px">
+<div style="width:36px;height:44px;flex:none;border-radius:6px;border:1px solid oklch(0.32 0.006 85);background:repeating-linear-gradient(0deg,oklch(0.22 0.006 85) 0 4px,oklch(0.26 0.006 85) 4px 8px)"></div>
+<div style="flex:1;min-width:0">
+<div style="font-size:15px;font-weight:600">{{ d.name }}</div>
+<div style="font-size:13px;color:{{ d.metaColor }};margin-top:2px">{{ d.meta }}</div>
+</div>
+<div style="color:oklch(0.5 0.01 85);font-size:18px">›</div>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isService }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="padding-top:8px;display:flex;justify-content:space-between;align-items:center">
+<div style="font-size:30px;font-weight:600;letter-spacing:-0.02em">Service log</div>
+<button onClick="{{ openAdd }}" style="border:none;border-radius:999px;background:#e0602c;color:oklch(0.14 0.01 50);font:inherit;font-size:14px;font-weight:600;padding:9px 14px;cursor:pointer">+ Add</button>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:12px">
+<div style="font-size:12px;color:oklch(0.7 0.01 85)">Logged</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:15px;margin-top:4px">{{ spendAll }}</div>
+</div>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:12px">
+<div style="font-size:12px;color:oklch(0.7 0.01 85)">Visits</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:15px;margin-top:4px">{{ visitCount }}</div>
+</div>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:12px">
+<div style="font-size:12px;color:oklch(0.7 0.01 85)">Last visit</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:15px;margin-top:4px">{{ lastVisit }}</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ serviceList }}" as="s" hint-placeholder-count="5">
+<div style="display:grid;grid-template-columns:14px 1fr;gap:14px">
+<div style="display:flex;flex-direction:column;align-items:center">
+<div style="width:10px;height:10px;border-radius:50%;background:#e0602c;margin-top:19px;flex:none"></div>
+<div style="width:1.5px;flex:1;background:oklch(0.32 0.006 85)"></div>
+</div>
+<div style="padding:14px 0;border-bottom:1px solid oklch(0.27 0.006 85);display:flex;justify-content:space-between;gap:12px">
+<div style="min-width:0">
+<div style="font-size:15px;font-weight:600">{{ s.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:3px">{{ s.date }} · {{ s.shop }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.7 0.01 85);margin-top:3px">{{ s.milesFmt }}</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:14px;flex:none">{{ s.costFmt }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isReminders }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="padding-top:8px;font-size:30px;font-weight:600;letter-spacing:-0.02em">Reminders</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ openReminders }}" as="r" hint-placeholder-count="4">
+<div style="background:oklch(0.21 0.006 85);border-radius:16px;padding:16px;border:1px solid oklch(0.27 0.006 85);display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+<div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85);text-transform:uppercase;letter-spacing:0.04em">{{ r.kind }}</div>
+<div style="font-size:16px;font-weight:600;margin-top:4px">{{ r.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:2px">{{ r.detail }}</div>
+</div>
+<div style="flex:none;font-size:13px;font-weight:600;padding:5px 10px;border-radius:999px;background:{{ r.bg }};color:{{ r.fg }}">{{ r.due }}</div>
+</div>
+<div style="display:flex;gap:8px">
+<button onClick="{{ r.done }}" style="flex:1;border:1px solid #e0602c;background:#e0602c;color:oklch(0.14 0.01 50);border-radius:10px;padding:10px;font:inherit;font-size:14px;font-weight:600;cursor:pointer">Mark done</button>
+<button style="flex:1;border:1px solid oklch(0.32 0.006 85);background:oklch(0.21 0.006 85);color:inherit;border-radius:10px;padding:10px;font:inherit;font-size:14px;cursor:pointer">Snooze</button>
+</div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ hasDone }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:14px;font-weight:600;color:oklch(0.7 0.01 85)">Completed</div>
+<sc-for list="{{ doneReminders }}" as="r" hint-placeholder-count="1">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:14px;background:oklch(0.24 0.006 85)">
+<div style="font-size:15px;color:oklch(0.7 0.01 85);text-decoration:line-through">{{ r.title }}</div>
+<button onClick="{{ r.undo }}" style="border:none;background:none;font:inherit;font-size:13px;color:oklch(0.72 0.15 45);cursor:pointer">Undo</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+</div>
+
+<div style="flex:none;display:grid;grid-template-columns:repeat(4,1fr);padding:10px 12px 28px;border-top:1px solid oklch(0.27 0.006 85);background:oklch(0.16 0.006 85 / 0.95)">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.go }}" style="border:none;background:none;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0;color:{{ t.color }}">
+<div style="width:22px;height:22px;border-radius:{{ t.radius }};border:2px solid currentColor;background:{{ t.fill }};box-sizing:border-box"></div>
+<div style="font-size:12px;font-weight:600">{{ t.label }}</div>
+</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeDoc }}" style="position:absolute;inset:0;background:oklch(0 0 0 / 0.6);display:flex;align-items:flex-end">
+<div onClick="{{ stop }}" style="width:100%;background:oklch(0.16 0.006 85);border-radius:28px 28px 44px 44px;padding:12px 20px 34px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<div style="width:40px;height:5px;border-radius:3px;background:oklch(0.35 0.006 85);align-self:center"></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-start">
+<div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85);text-transform:uppercase;letter-spacing:0.04em">{{ doc.cat }}</div>
+<div style="font-size:22px;font-weight:600;letter-spacing:-0.01em;margin-top:4px">{{ doc.name }}</div>
+</div>
+<button onClick="{{ closeDoc }}" style="width:32px;height:32px;border-radius:50%;border:none;background:oklch(0.27 0.006 85);font:inherit;font-size:16px;color:inherit;cursor:pointer">×</button>
+</div>
+<div style="height:220px;border-radius:14px;border:1px solid oklch(0.3 0.006 85);background:repeating-linear-gradient(135deg,oklch(0.22 0.006 85) 0 8px,oklch(0.26 0.006 85) 8px 16px);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85)">document scan</div>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px">
+<sc-for list="{{ doc.fields }}" as="f" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;gap:12px;padding:11px 14px;border-top:{{ f.divider }};font-size:14px">
+<div style="color:oklch(0.7 0.01 85)">{{ f.k }}</div>
+<div style="font-weight:500;text-align:right">{{ f.v }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;gap:8px">
+<a href="{{ doc.url }}" target="_blank" rel="noopener" style="flex:1;text-align:center;text-decoration:none;background:#e0602c;color:oklch(0.14 0.01 50);border-radius:12px;padding:13px;font-size:15px;font-weight:600">Open in Gmail</a>
+<button style="flex:1;border:1px solid oklch(0.32 0.006 85);background:oklch(0.21 0.006 85);color:inherit;border-radius:12px;padding:13px;font:inherit;font-size:15px;cursor:pointer">Replace</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showAdd }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:oklch(0 0 0 / 0.6);display:flex;align-items:flex-end">
+<div style="width:100%;background:oklch(0.16 0.006 85);border-radius:28px 28px 44px 44px;padding:20px 20px 34px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<button onClick="{{ closeAdd }}" style="border:none;background:none;font:inherit;font-size:15px;color:oklch(0.7 0.01 85);cursor:pointer;padding:0">Cancel</button>
+<div style="font-size:16px;font-weight:600">New service</div>
+<button onClick="{{ saveAdd }}" style="border:none;background:none;font:inherit;font-size:15px;font-weight:600;color:oklch(0.72 0.15 45);cursor:pointer;padding:0">Save</button>
+</div>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">What was done
+<input value="{{ form.title }}" onChange="{{ setTitle }}" placeholder="e.g. Cabin air filter" style="border:1px solid oklch(0.32 0.006 85);border-radius:12px;padding:12px;font-size:16px;background:oklch(0.21 0.006 85);color:oklch(0.95 0.005 85)"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Shop
+<input value="{{ form.shop }}" onChange="{{ setShop }}" placeholder="e.g. Pep Boys" style="border:1px solid oklch(0.32 0.006 85);border-radius:12px;padding:12px;font-size:16px;background:oklch(0.21 0.006 85);color:oklch(0.95 0.005 85)"></input>
+</label>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85);min-width:0">Odometer ({{ unit }})
+<input value="{{ form.miles }}" onChange="{{ setMiles }}" inputMode="numeric" style="border:1px solid oklch(0.32 0.006 85);border-radius:12px;padding:12px;font-size:16px;background:oklch(0.21 0.006 85);font-family:'IBM Plex Mono',monospace;color:oklch(0.95 0.005 85);min-width:0"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85);min-width:0">Cost ($)
+<input value="{{ form.cost }}" onChange="{{ setCost }}" inputMode="decimal" placeholder="0.00" style="border:1px solid oklch(0.32 0.006 85);border-radius:12px;padding:12px;font-size:16px;background:oklch(0.21 0.006 85);font-family:'IBM Plex Mono',monospace;color:oklch(0.95 0.005 85);min-width:0"></input>
+</label>
+</div>
+<div style="height:64px;border-radius:12px;border:1.5px dashed oklch(0.38 0.006 85);display:flex;align-items:center;justify-content:center;font-size:14px;color:oklch(0.7 0.01 85)">Attach receipt</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;units&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mi&quot;,&quot;km&quot;],&quot;default&quot;:&quot;mi&quot;,&quot;tsType&quot;:&quot;'mi'|'km'&quot;},&quot;homeReminders&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;min&quot;:1,&quot;max&quot;:5,&quot;default&quot;:2,&quot;tsType&quot;:&quot;number&quot;},&quot;startTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;docs&quot;,&quot;service&quot;,&quot;reminders&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const G={"reg":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1873837649678577414|msg-f:1873837649678577414","notice":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1872558929714840491|msg-f:1872558929714840491","ins":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1827722958699098288|msg-f:1827722958699098288","insp":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1806037795565592816|msg-f:1806037795565592816","ls":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1834027094225976403|msg-f:1834027094225976403","arms":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1834749632460213586|msg-f:1834749632460213586","dl":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1875921908162501018|msg-f:1875921908162501018","tix1":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1834839131848419335|msg-f:1834839131848419335","tix2":"https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/thread-f:1847426183174883020|msg-f:1847426183174883020"};
+const DOCS=[
+{id:'reg',cat:'Registration',name:'Registration renewal + temp permit',short:'Registration',meta:'Renewed Aug 18, 2026 · tags by mail',url:G.reg,fields:[['State','Colorado DMV'],['Plate','BNEB07'],['Renewed','Aug 18, 2026 (online)'],['Attachment','TempPermit.PDF'],['Next due','Jul 31, 2027']]},
+{id:'notice',cat:'Registration',name:'Registration renewal notice',meta:'Aug 3, 2026 · $88.79',url:G.notice,fields:[['Vehicle','2008 BMW · BNEB07'],['Fees','$88.79 · $117.79 w/ Parks Pass'],['Emissions','No test required'],['Attachment','Vehicle Renewal Notice.PDF']]},
+{id:'ins',cat:'Insurance',name:'Insurance ID card',short:'Insurance card',warn:true,meta:'Sent Mar 27, 2025 · check it’s current',url:G.ins,fields:[['Carrier','State Farm (family policy)'],['From','Mom, Mar 27, 2025'],['Attachment','Lukes insurance card.pdf']]},
+{id:'insp',cat:'Inspection',name:'Vehicle inspection report',short:'Inspection',meta:'Firestone · Jul 29, 2024',url:G.insp,fields:[['Shop','Firestone Complete Auto Care, Flatirons'],['Vehicle','2008 BMW X5 4.8i'],['Date','Jul 29, 2024'],['Attachment','VehicleInspectionInformation.pdf']]},
+{id:'dl',cat:'License',name:'Driver license renewal',short:'Driver license',meta:'Renewed Sep 10, 2026 · card by mail',url:G.dl,fields:[['Via','myColorado'],['Renewed','Sep 10, 2026'],['New card','Arrives within 30 days']]},
+{id:'ls',cat:'Receipts',name:'Alignment — Les Schwab',meta:'Jun 6, 2025 · Federal Blvd',url:G.ls,fields:[['Service','Alignment'],['Shop','Les Schwab, 2001 Federal Blvd'],['Phone','303-455-9424']]},
+{id:'arms',cat:'Receipts',name:'Control arms + inspection',meta:'Jun 12, 2025 · $1,100',url:G.arms,fields:[['Work','Control arms & inspection'],['Paid','$1,100 (Zelle from Dad)'],['Date','Jun 12, 2025']]},
+{id:'tix2',cat:'Receipts',name:'Parking tickets — paid',meta:'Oct 30, 2025 · 2 tickets',url:G.tix2,fields:[['Status','Paid by Dad'],['Date','Oct 30, 2025']]},
+{id:'tix1',cat:'Receipts',name:'Denver parking ticket — paid',meta:'Jun 13, 2025',url:G.tix1,fields:[['Status','Paid by Dad'],['Date','Jun 13, 2025']]}];
+const SERVICE=[
+{title:'Control arms + inspection',shop:'Shop not listed',date:'Jun 12, 2025',year:2025,miles:null,cost:1100},
+{title:'Alignment',shop:'Les Schwab · Federal Blvd',date:'Jun 6, 2025',year:2025,miles:null,cost:null},
+{title:'Vehicle inspection',shop:'Firestone · Flatirons',date:'Jul 29, 2024',year:2024,miles:null,cost:null}];
+const REMINDERS=[
+{id:'ins',kind:'Insurance',title:'Get your current insurance card',detail:'Newest on file is from Mar 2025 · State Farm',due:'Check',tone:'soon'},
+{id:'insp',kind:'Service',title:'Yearly inspection',detail:'Last full inspection Jul 2024 (Firestone)',due:'Overdue',tone:'soon'},
+{id:'dl',kind:'License',title:'New driver license in the mail',detail:'Renewed Sep 10 via myColorado',due:'Oct 10',tone:'ok'},
+{id:'oil',kind:'Service',title:'Log your last oil change',detail:'None found in your email',due:'Add',tone:'ok'},
+{id:'reg',kind:'Renewal',title:'Registration renewal',detail:'Colorado DMV · $88.79 last time · no emissions',due:'Jul 31, 2027',tone:'ok'}];
+const money=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
+class Component extends DCLogic{
+state={tab:this.props.startTab??'home',cat:'All',doc:null,done:{},service:SERVICE,showAdd:false,form:{title:'',shop:'',miles:'',cost:''}};
+renderVals(){
+const s=this.state,km=(this.props.units??'mi')==='km',unit=km?'km':'mi';
+const dist=m=>m==null?'Mileage not recorded':Math.round(km?m*1.609:m).toLocaleString('en-US')+' '+unit;
+const tone=t=>t==='soon'?{bg:'oklch(0.32 0.08 45)',fg:'oklch(0.86 0.1 55)'}:{bg:'oklch(0.24 0.006 85)',fg:'oklch(0.82 0.005 85)'};
+const rem=REMINDERS.map(r=>({...r,...tone(r.tone),done:()=>this.setState(p=>({done:{...p.done,[r.id]:true}})),undo:()=>this.setState(p=>{const d={...p.done};delete d[r.id];return{done:d}})}));
+const openR=rem.filter(r=>!s.done[r.id]),doneR=rem.filter(r=>s.done[r.id]);
+const open=d=>()=>this.setState({doc:d.id});
+const mapDoc=(d,i)=>({...d,short:d.short||d.name,metaColor:d.warn?'oklch(0.76 0.13 50)':'oklch(0.7 0.01 85)',open:open(d),divider:i?'1px solid oklch(0.25 0.006 85)':'none'});
+const cats=['All','Registration','Insurance','Inspection','Receipts','License'].map(c=>({label:c,select:()=>this.setState({cat:c}),bg:c===s.cat?'#e0602c':'oklch(0.21 0.006 85)',fg:c===s.cat?'oklch(0.14 0.01 50)':'oklch(0.85 0.005 85)',border:c===s.cat?'#e0602c':'oklch(0.32 0.006 85)'}));
+const docList=DOCS.filter(d=>s.cat==='All'||d.cat===s.cat).map(mapDoc);
+const pinned=['reg','ins','insp','dl'].map(id=>DOCS.find(d=>d.id===id)).map(mapDoc);
+const svc=s.service.map(x=>({...x,milesFmt:dist(x.miles),costFmt:x.cost==null?'—':money(x.cost)}));
+const d=s.doc&&DOCS.find(x=>x.id===s.doc);
+const tabs=[['home','Home','50%'],['docs','Documents','5px'],['service','Service','5px'],['reminders','Reminders','50%']].map(([id,label,radius])=>({label,radius,go:()=>this.setState({tab:id}),color:s.tab===id?'oklch(0.72 0.15 45)':'oklch(0.55 0.01 85)',fill:s.tab===id?'currentColor':'transparent'}));
+const setF=k=>e=>{const v=e.target.value;this.setState(p=>({form:{...p.form,[k]:v}}))};
+return{
+isHome:s.tab==='home',isDocs:s.tab==='docs',isService:s.tab==='service',isReminders:s.tab==='reminders',
+tabs,unit,
+spendAll:money(Math.round(s.service.reduce((a,x)=>a+(x.cost||0),0))),visitCount:s.service.length,lastVisit:s.service[0]?s.service[0].date.replace(/ \d+,/,''):'—',
+upcoming:openR.slice(0,this.props.homeReminders??2),pinned,last:svc[0]||{},cats,docList,serviceList:svc,
+openReminders:openR,doneReminders:doneR,hasDone:doneR.length>0,
+goReminders:()=>this.setState({tab:'reminders'}),goDocs:()=>this.setState({tab:'docs'}),
+hasDoc:!!d,doc:d?{...d,fields:d.fields.map(([k,v],i)=>({k,v,divider:i?'1px solid oklch(0.25 0.006 85)':'none'}))}:{fields:[]},
+closeDoc:()=>this.setState({doc:null}),stop:e=>e.stopPropagation(),
+showAdd:s.showAdd,form:s.form,openAdd:()=>this.setState({showAdd:true}),closeAdd:()=>this.setState({showAdd:false}),
+setTitle:setF('title'),setShop:setF('shop'),setMiles:setF('miles'),setCost:setF('cost'),
+saveAdd:()=>{const f=s.form;if(!f.title.trim())return;const m=parseInt(String(f.miles).replace(/\D/g,''));
+this.setState(p=>({showAdd:false,form:{title:'',shop:'',miles:'',cost:''},service:[{title:f.title,shop:f.shop||'—',date:'Oct 9, 2026',year:2026,miles:isNaN(m)?null:(km?Math.round(m/1.609):m),cost:f.cost===''?null:(parseFloat(f.cost)||0)},...p.service]}))}
+};}}
+</script>
+</body>
+</html>
