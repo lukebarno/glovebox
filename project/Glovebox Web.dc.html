@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:oklch(0.14 0.006 85);font-family:'Instrument Sans',system-ui,sans-serif;color:oklch(0.95 0.005 85);-webkit-font-smoothing:antialiased}
+a{color:oklch(0.72 0.15 45)}a:hover{color:oklch(0.8 0.13 50)}
+input,select,textarea{font-family:inherit}
+input[type=date]{color-scheme:dark}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+<header style="border-bottom:1px solid oklch(0.25 0.006 85);background:oklch(0.16 0.006 85);position:sticky;top:0;z-index:5">
+<div style="max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px">
+<div style="display:flex;align-items:baseline;gap:12px">
+<div style="font-size:20px;font-weight:700;letter-spacing:-0.02em">Glovebox</div>
+<div style="font-size:14px;color:oklch(0.7 0.01 85)">{{ carTitle }}</div>
+</div>
+<nav style="display:flex;gap:4px;flex:1;overflow-x:auto">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.go }}" style="border:none;background:{{ t.bg }};color:{{ t.fg }};border-radius:8px;padding:8px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">{{ t.label }}</button>
+</sc-for>
+</nav>
+<a href="Glovebox.dc.html" style="font-size:14px;text-decoration:none;white-space:nowrap;flex:none">App view →</a>
+</div>
+</header>
+
+<main style="flex:1;width:100%;max-width:1120px;margin:0 auto;padding:28px 24px 48px;box-sizing:border-box">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px">
+
+<section style="grid-column:1/-1;background:oklch(0.21 0.006 85);border:1px solid oklch(0.3 0.006 85);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:16px">
+<div>
+<div style="font-size:14px;color:oklch(0.7 0.01 85)">{{ carSub }}</div>
+<h1 style="margin:4px 0 0;font-size:40px;font-weight:600;letter-spacing:-0.03em;line-height:1.05">{{ car.name }}</h1>
+</div>
+<div style="display:flex;gap:10px;align-items:center">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:14px;border:1px solid oklch(0.4 0.006 85);border-radius:6px;padding:5px 10px">{{ car.plate }}</div>
+<button onClick="{{ openCar }}" style="background:transparent;border:1px solid oklch(0.32 0.006 85);color:inherit;border-radius:10px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:oklch(0.25 0.006 85)">Edit details</button>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px 24px">
+<sc-for list="{{ facts }}" as="f" hint-placeholder-count="6">
+<div style="min-width:0">
+<div style="font-size:13px;color:oklch(0.7 0.01 85)">{{ f.k }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:16px;margin-top:4px;color:{{ f.color }};overflow-wrap:anywhere">{{ f.v }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+<h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-0.01em">Coming up</h2>
+<button onClick="{{ goReminders }}" style="border:none;background:none;font:inherit;font-size:14px;color:oklch(0.72 0.15 45);cursor:pointer;padding:0;white-space:nowrap;flex:none">All reminders</button>
+</div>
+<sc-for list="{{ upcoming }}" as="r" hint-placeholder-count="3">
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div style="min-width:0">
+<div style="font-size:15px;font-weight:600">{{ r.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:2px">{{ r.detail }}</div>
+</div>
+<div style="flex:none;font-size:13px;font-weight:600;padding:5px 10px;border-radius:999px;background:{{ r.bg }};color:{{ r.fg }}">{{ r.label }}</div>
+</div>
+</sc-for>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+<h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-0.01em">Key documents</h2>
+<button onClick="{{ goDocs }}" style="border:none;background:none;font:inherit;font-size:14px;color:oklch(0.72 0.15 45);cursor:pointer;padding:0;white-space:nowrap;flex:none">All documents</button>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ pinned }}" as="d" hint-placeholder-count="4">
+<button onClick="{{ d.open }}" style="text-align:left;font:inherit;color:inherit;cursor:pointer;background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:16px;min-width:0" style-hover="border-color:oklch(0.4 0.006 85)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85);text-transform:uppercase;letter-spacing:0.04em">{{ d.cat }}</div>
+<div style="min-width:0">
+<div style="font-size:15px;font-weight:600">{{ d.short }}</div>
+<div style="font-size:12px;color:{{ d.metaColor }};margin-top:2px">{{ d.meta }}</div>
+</div>
+</button>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+<h2 style="margin:0;font-size:20px;font-weight:600;letter-spacing:-0.01em">Recent service</h2>
+<button onClick="{{ goService }}" style="border:none;background:none;font:inherit;font-size:14px;color:oklch(0.72 0.15 45);cursor:pointer;padding:0;white-space:nowrap;flex:none">Service log</button>
+</div>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px">
+<sc-for list="{{ recent }}" as="s" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;gap:12px;padding:13px 16px;border-top:{{ s.divider }}">
+<div style="min-width:0">
+<div style="font-size:15px;font-weight:600">{{ s.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:2px">{{ s.dateFmt }} · {{ s.shop }}</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:14px;flex:none">{{ s.costFmt }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDocs }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+<h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-0.02em">Documents</h1>
+<button onClick="{{ openAddDoc }}" style="background:#e0602c;color:oklch(0.14 0.01 50);border:none;border-radius:10px;padding:10px 16px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">+ Add document</button>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+<button onClick="{{ c.select }}" style="border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer">{{ c.label }}</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px">
+<sc-for list="{{ docList }}" as="d" hint-placeholder-count="6">
+<button onClick="{{ d.open }}" style="text-align:left;font:inherit;color:inherit;cursor:pointer;background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;min-width:0" style-hover="border-color:oklch(0.4 0.006 85)">
+<div style="width:38px;height:48px;flex:none;border-radius:6px;border:1px solid oklch(0.32 0.006 85);background:repeating-linear-gradient(0deg,oklch(0.22 0.006 85) 0 4px,oklch(0.26 0.006 85) 4px 8px)"></div>
+<div style="flex:1;min-width:0">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85);text-transform:uppercase;letter-spacing:0.04em">{{ d.cat }}</div>
+<div style="font-size:15px;font-weight:600;margin-top:3px">{{ d.name }}</div>
+<div style="font-size:13px;color:{{ d.metaColor }};margin-top:2px">{{ d.meta }}</div>
+</div>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{ noDocs }}" hint-placeholder-val="{{ false }}">
+<div style="padding:32px;text-align:center;color:oklch(0.7 0.01 85);border:1.5px dashed oklch(0.32 0.006 85);border-radius:14px">Nothing in this category yet.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isService }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+<h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-0.02em">Service log</h1>
+<button onClick="{{ openAddService }}" style="background:#e0602c;color:oklch(0.14 0.01 50);border:none;border-radius:10px;padding:10px 16px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">+ Log service</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:16px">
+<div style="font-size:13px;color:oklch(0.7 0.01 85)">Logged spend</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:20px;margin-top:6px">{{ spendAll }}</div>
+</div>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:16px">
+<div style="font-size:13px;color:oklch(0.7 0.01 85)">Visits</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:20px;margin-top:6px">{{ visitCount }}</div>
+</div>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:16px">
+<div style="font-size:13px;color:oklch(0.7 0.01 85)">Last visit</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:20px;margin-top:6px">{{ lastVisit }}</div>
+</div>
+</div>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px">
+<sc-for list="{{ serviceList }}" as="s" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:16px 18px;border-top:{{ s.divider }};align-items:center">
+<div style="min-width:0">
+<div style="font-size:16px;font-weight:600">{{ s.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:3px">{{ s.dateFmt }} · {{ s.shop }} · <span style="font-family:'IBM Plex Mono',monospace;font-size:12px">{{ s.milesFmt }}</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:14px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:15px">{{ s.costFmt }}</div>
+<button onClick="{{ s.remove }}" style="border:none;background:none;font:inherit;font-size:13px;color:oklch(0.6 0.01 85);cursor:pointer;padding:4px" style-hover="color:oklch(0.85 0.1 40)">Delete</button>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isReminders }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+<h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-0.02em">Reminders</h1>
+<button onClick="{{ openAddReminder }}" style="background:#e0602c;color:oklch(0.14 0.01 50);border:none;border-radius:10px;padding:10px 16px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">+ Add reminder</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px">
+<sc-for list="{{ openReminders }}" as="r" hint-placeholder-count="4">
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+<div style="min-width:0">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85);text-transform:uppercase;letter-spacing:0.04em">{{ r.kind }}</div>
+<div style="font-size:16px;font-weight:600;margin-top:4px">{{ r.title }}</div>
+<div style="font-size:13px;color:oklch(0.7 0.01 85);margin-top:2px">{{ r.detail }}</div>
+</div>
+<div style="flex:none;font-size:13px;font-weight:600;padding:5px 10px;border-radius:999px;background:{{ r.bg }};color:{{ r.fg }}">{{ r.label }}</div>
+</div>
+<div style="display:flex;gap:8px;margin-top:auto">
+<button onClick="{{ r.done }}" style="flex:1;background:#e0602c;color:oklch(0.14 0.01 50);border:none;border-radius:10px;padding:10px;font:inherit;font-size:14px;font-weight:600;cursor:pointer">Mark done</button>
+<button onClick="{{ r.remove }}" style="background:transparent;border:1px solid oklch(0.32 0.006 85);color:inherit;border-radius:10px;padding:10px 14px;font:inherit;font-size:14px;cursor:pointer">Delete</button>
+</div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ hasDone }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<h2 style="margin:8px 0 0;font-size:15px;font-weight:600;color:oklch(0.7 0.01 85)">Completed</h2>
+<sc-for list="{{ doneReminders }}" as="r" hint-placeholder-count="1">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:12px;background:oklch(0.19 0.006 85)">
+<div style="font-size:15px;color:oklch(0.7 0.01 85);text-decoration:line-through">{{ r.title }}</div>
+<button onClick="{{ r.undo }}" style="border:none;background:none;font:inherit;font-size:13px;color:oklch(0.72 0.15 45);cursor:pointer">Undo</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</main>
+
+<footer style="border-top:1px solid oklch(0.25 0.006 85)">
+<div style="max-width:1120px;margin:0 auto;padding:16px 24px;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;font-size:13px;color:oklch(0.6 0.01 85)">
+<div style="flex:1;min-width:200px">{{ saveStatus }}</div>
+<button onClick="{{ exportData }}" style="border:none;background:none;font:inherit;font-size:13px;color:oklch(0.72 0.15 45);cursor:pointer;padding:0">Export backup</button>
+<button onClick="{{ resetData }}" style="border:none;background:none;font:inherit;font-size:13px;color:oklch(0.6 0.01 85);cursor:pointer;padding:0">Reset to email data</button>
+</div>
+</footer>
+
+<sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeAll }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10">
+<div onClick="{{ stop }}" style="width:100%;max-width:580px;max-height:90vh;overflow:auto;background:oklch(0.18 0.006 85);border:1px solid oklch(0.3 0.006 85);border-radius:20px;padding:22px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+<div style="flex:1;min-width:0">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.7 0.01 85);text-transform:uppercase;letter-spacing:0.04em">{{ doc.cat }}</div>
+<div style="font-size:22px;font-weight:600;letter-spacing:-0.01em;margin-top:4px">{{ doc.name }}</div>
+</div>
+<button onClick="{{ closeAll }}" style="width:34px;height:34px;flex:none;border-radius:50%;border:none;background:oklch(0.27 0.006 85);color:inherit;font:inherit;font-size:17px;cursor:pointer">×</button>
+</div>
+{{ preview }}
+<sc-if value="{{ doc.noFile }}" hint-placeholder-val="{{ true }}">
+<label style="height:120px;border-radius:12px;border:1.5px dashed oklch(0.38 0.006 85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:14px;color:oklch(0.7 0.01 85);cursor:pointer;text-align:center;padding:0 16px">
+<span style="width:100%;color:oklch(0.9 0.005 85);font-weight:600">Attach a scan or PDF</span>
+<span style="width:100%;font-size:12px">{{ doc.attachHint }}</span>
+<input type="file" accept="image/*,application/pdf" onChange="{{ attachToDoc }}" style="display:none"></input>
+</label>
+</sc-if>
+<div style="background:oklch(0.21 0.006 85);border:1px solid oklch(0.27 0.006 85);border-radius:12px">
+<sc-for list="{{ doc.fields }}" as="f" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;gap:16px;padding:11px 14px;border-top:{{ f.divider }};font-size:14px">
+<div style="color:oklch(0.7 0.01 85);flex:none">{{ f.k }}</div>
+<div style="flex:1;min-width:0;font-weight:500;text-align:right;overflow-wrap:anywhere">{{ f.v }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-if value="{{ doc.hasUrl }}" hint-placeholder-val="{{ false }}">
+<a href="{{ doc.url }}" target="_blank" rel="noopener" style="flex:1;text-align:center;text-decoration:none;background:#e0602c;color:oklch(0.14 0.01 50);border-radius:10px;padding:12px;font-size:14px;font-weight:600;min-width:140px">Open in Gmail</a>
+</sc-if>
+<sc-if value="{{ doc.hasFile }}" hint-placeholder-val="{{ false }}">
+<a href="{{ doc.fileData }}" download="{{ doc.fileName }}" style="flex:1;text-align:center;text-decoration:none;background:transparent;border:1px solid oklch(0.32 0.006 85);color:inherit;border-radius:10px;padding:11px;font-size:14px;min-width:120px">Download file</a>
+</sc-if>
+<button onClick="{{ deleteDoc }}" style="background:transparent;border:1px solid oklch(0.32 0.006 85);color:oklch(0.8 0.08 40);border-radius:10px;padding:11px 14px;font:inherit;font-size:14px;cursor:pointer">Delete</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasModal }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeAll }}" style="position:fixed;inset:0;background:oklch(0 0 0 / 0.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10">
+<div onClick="{{ stop }}" style="width:100%;max-width:520px;max-height:90vh;overflow:auto;background:oklch(0.18 0.006 85);border:1px solid oklch(0.3 0.006 85);border-radius:20px;padding:22px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div style="font-size:20px;font-weight:600">{{ modalTitle }}</div>
+<button onClick="{{ closeAll }}" style="width:34px;height:34px;border-radius:50%;border:none;background:oklch(0.27 0.006 85);color:inherit;font:inherit;font-size:17px;cursor:pointer">×</button>
+</div>
+
+<sc-if value="{{ mDoc }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Name
+<input value="{{ f.name }}" onChange="{{ fx.name }}" placeholder="e.g. State Farm ID card 2026" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Category
+<select value="{{ f.cat }}" onChange="{{ fx.cat }}" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)">
+<option value="Registration">Registration</option><option value="Insurance">Insurance</option><option value="Inspection">Inspection</option><option value="Receipts">Receipts</option><option value="License">License</option><option value="Other">Other</option>
+</select>
+</label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Expires (optional)
+<input type="date" value="{{ f.expires }}" onChange="{{ fx.expires }}" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:10px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+</div>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Notes
+<textarea value="{{ f.notes }}" onChange="{{ fx.notes }}" rows="3" placeholder="Policy #, coverage, anything useful" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85);resize:vertical"></textarea>
+</label>
+<label style="border-radius:10px;border:1.5px dashed oklch(0.38 0.006 85);padding:16px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;color:oklch(0.7 0.01 85);cursor:pointer;text-align:center">
+<span style="width:100%;color:oklch(0.9 0.005 85);font-weight:600">{{ fileLabel }}</span>
+<span style="width:100%;font-size:12px">Photo or PDF, up to 3 MB</span>
+<input type="file" accept="image/*,application/pdf" onChange="{{ pickFile }}" style="display:none"></input>
+</label>
+</div>
+</sc-if>
+
+<sc-if value="{{ mService }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">What was done
+<input value="{{ f.title }}" onChange="{{ fx.title }}" placeholder="e.g. Oil & filter change" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Shop
+<input value="{{ f.shop }}" onChange="{{ fx.shop }}" placeholder="e.g. Les Schwab, Federal Blvd" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Date
+<input type="date" value="{{ f.date }}" onChange="{{ fx.date }}" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:10px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Odometer (mi)
+<input value="{{ f.miles }}" onChange="{{ fx.miles }}" inputMode="numeric" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;font-family:'IBM Plex Mono',monospace;color:oklch(0.95 0.005 85)"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Cost ($)
+<input value="{{ f.cost }}" onChange="{{ fx.cost }}" inputMode="decimal" placeholder="0.00" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;font-family:'IBM Plex Mono',monospace;color:oklch(0.95 0.005 85)"></input>
+</label>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ mReminder }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Reminder
+<input value="{{ f.title }}" onChange="{{ fx.title }}" placeholder="e.g. Oil change" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Due date
+<input type="date" value="{{ f.date }}" onChange="{{ fx.date }}" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:10px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Type
+<select value="{{ f.kind }}" onChange="{{ fx.kind }}" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)">
+<option value="Service">Service</option><option value="Renewal">Renewal</option><option value="Insurance">Insurance</option><option value="Other">Other</option>
+</select>
+</label>
+</div>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">Note
+<input value="{{ f.notes }}" onChange="{{ fx.notes }}" placeholder="e.g. Every 7,500 mi" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+</div>
+</sc-if>
+
+<sc-if value="{{ mCar }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+<sc-for list="{{ carFields }}" as="cf" hint-placeholder-count="8">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:oklch(0.7 0.01 85)">{{ cf.label }}
+<input value="{{ cf.value }}" onChange="{{ cf.onChange }}" placeholder="{{ cf.ph }}" style="width:100%;box-sizing:border-box;background:oklch(0.14 0.006 85);border:1px solid oklch(0.32 0.006 85);border-radius:10px;padding:11px 12px;font-size:15px;color:oklch(0.95 0.005 85)"></input>
+</label>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:4px">
+<button onClick="{{ closeAll }}" style="background:transparent;border:1px solid oklch(0.32 0.006 85);color:inherit;border-radius:10px;padding:10px 16px;font:inherit;font-size:14px;cursor:pointer">Cancel</button>
+<button onClick="{{ save }}" style="background:#e0602c;color:oklch(0.14 0.01 50);border:none;border-radius:10px;padding:10px 18px;font:inherit;font-size:14px;font-weight:600;cursor:pointer">Save</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const G='https://mail.google.com/mail/?authuser=barnocky2@gmail.com#all/';
+const gm=id=>G+'thread-f:'+id+'|msg-f:'+id;
+const KEY='glovebox-web-v1';
+const CATS=['Registration','Insurance','Inspection','Receipts','License','Other'];
+const seed=()=>({
+car:{year:'2008',name:'BMW X5',trim:'4.8i',city:'Denver, CO',plate:'BNEB07',vin:'',odometer:'',regThrough:'Jul 31, 2027',insurer:'State Farm',policy:'',value:'$1,900 (Carvana, 2024)'},
+docs:[
+{id:'reg',cat:'Registration',name:'Registration renewal + temp permit',short:'Registration',meta:'Renewed Aug 18, 2026 · tags by mail',url:gm('1873837649678577414'),pinned:true,fields:[['State','Colorado DMV'],['Plate','BNEB07'],['Renewed','Aug 18, 2026 (online)'],['In email','TempPermit.PDF'],['Next due','Jul 31, 2027']]},
+{id:'notice',cat:'Registration',name:'Registration renewal notice',meta:'Aug 3, 2026 · $88.79',url:gm('1872558929714840491'),fields:[['Vehicle','2008 BMW · BNEB07'],['Fees','$88.79 · $117.79 w/ Parks Pass'],['Emissions','No test required'],['In email','Vehicle Renewal Notice.PDF']]},
+{id:'ins',cat:'Insurance',name:'Insurance ID card',short:'Insurance card',warn:true,pinned:true,meta:'Sent Mar 27, 2025 · check it’s current',url:gm('1827722958699098288'),fields:[['Carrier','State Farm (family policy)'],['From','Mom, Mar 27, 2025'],['In email','Lukes insurance card.pdf']]},
+{id:'insp',cat:'Inspection',name:'Vehicle inspection report',short:'Inspection',pinned:true,meta:'Firestone · Jul 29, 2024',url:gm('1806037795565592816'),fields:[['Shop','Firestone Complete Auto Care, Flatirons'],['Vehicle','2008 BMW X5 4.8i'],['Date','Jul 29, 2024'],['In email','VehicleInspectionInformation.pdf']]},
+{id:'dl',cat:'License',name:'Driver license renewal',short:'Driver license',pinned:true,meta:'Renewed Sep 10, 2026 · card by mail',url:gm('1875921908162501018'),fields:[['Via','myColorado'],['Renewed','Sep 10, 2026'],['New card','Arrives within 30 days']]},
+{id:'ls',cat:'Receipts',name:'Alignment — Les Schwab',meta:'Jun 6, 2025 · Federal Blvd',url:gm('1834027094225976403'),fields:[['Service','Alignment'],['Shop','Les Schwab, 2001 Federal Blvd'],['Phone','303-455-9424']]},
+{id:'arms',cat:'Receipts',name:'Control arms + inspection',meta:'Jun 12, 2025 · $1,100',url:gm('1834749632460213586'),fields:[['Work','Control arms & inspection'],['Paid','$1,100 (Zelle from Dad)'],['Date','Jun 12, 2025']]},
+{id:'tix2',cat:'Receipts',name:'Parking tickets — paid',meta:'Oct 30, 2025 · 2 tickets',url:gm('1847426183174883020'),fields:[['Status','Paid by Dad'],['Date','Oct 30, 2025']]},
+{id:'tix1',cat:'Receipts',name:'Denver parking ticket — paid',meta:'Jun 13, 2025',url:gm('1834839131848419335'),fields:[['Status','Paid by Dad'],['Date','Jun 13, 2025']]}],
+service:[
+{id:'s1',title:'Control arms + inspection',shop:'Shop not listed',date:'2025-06-12',miles:null,cost:1100},
+{id:'s2',title:'Alignment',shop:'Les Schwab · Federal Blvd',date:'2025-06-06',miles:null,cost:null},
+{id:'s3',title:'Vehicle inspection',shop:'Firestone · Flatirons',date:'2024-07-29',miles:null,cost:null}],
+reminders:[
+{id:'ins',kind:'Insurance',title:'Get your current insurance card',detail:'Newest on file is from Mar 2025 · State Farm',label:'Check',tone:'soon'},
+{id:'insp',kind:'Service',title:'Yearly inspection',detail:'Last full inspection Jul 2024 (Firestone)',date:'2025-07-29'},
+{id:'dl',kind:'License',title:'New driver license in the mail',detail:'Renewed Sep 10 via myColorado',date:'2026-10-10'},
+{id:'oil',kind:'Service',title:'Log your last oil change',detail:'None found in your email',label:'Add',tone:'ok'},
+{id:'reg',kind:'Renewal',title:'Registration renewal',detail:'Colorado DMV · $88.79 last time · no emissions',date:'2027-07-31'}],
+done:{}});
+const fmtDate=s=>{if(!s)return '';const d=new Date(s+'T12:00:00');return isNaN(d)?s:d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})};
+const money=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
+const uid=()=>Math.random().toString(36).slice(2,9);
+const today=()=>new Date().toISOString().slice(0,10);
+class Component extends DCLogic{
+state={tab:'home',cat:'All',docId:null,modal:null,f:{},saved:null,...seed()};
+componentDidMount(){try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);this.setState({...d,saved:'loaded'})}}catch(e){}}
+persist(){const {car,docs,service,reminders,done}=this.state;try{localStorage.setItem(KEY,JSON.stringify({car,docs,service,reminders,done}));this.setState({saved:'ok'})}catch(e){this.setState({saved:'full'});alert('Storage is full — try a smaller file.')}}
+upd(patch){this.setState(patch,()=>this.persist())}
+open(modal,f){this.setState({modal,f,docId:null})}
+readFile(e,cb){const file=e.target.files&&e.target.files[0];if(!file)return;if(file.size>3e6){alert('Please choose a file under 3 MB.');return}const r=new FileReader();r.onload=()=>cb({name:file.name,type:file.type,data:r.result});r.readAsDataURL(file)}
+save(){const s=this.state,f=s.f;
+if(s.modal==='doc'){if(!f.name||!f.name.trim())return;const fields=[];if(f.expires)fields.push(['Expires',fmtDate(f.expires)]);if(f.notes)fields.push(['Notes',f.notes]);fields.push(['Added',fmtDate(today())]);
+this.upd({modal:null,docs:[{id:uid(),cat:f.cat||'Other',name:f.name.trim(),meta:f.expires?'Expires '+fmtDate(f.expires):'Added '+fmtDate(today()),fields,file:f.file||null},...s.docs]})}
+else if(s.modal==='service'){if(!f.title||!f.title.trim())return;const m=parseInt(String(f.miles||'').replace(/\D/g,''));
+this.upd({modal:null,service:[{id:uid(),title:f.title.trim(),shop:f.shop||'—',date:f.date||today(),miles:isNaN(m)?null:m,cost:f.cost===''||f.cost==null?null:(parseFloat(f.cost)||0)},...s.service],car:!isNaN(m)&&(!s.car.odometer||m>parseInt(s.car.odometer))?{...s.car,odometer:String(m)}:s.car})}
+else if(s.modal==='reminder'){if(!f.title||!f.title.trim())return;this.upd({modal:null,reminders:[...s.reminders,{id:uid(),kind:f.kind||'Service',title:f.title.trim(),detail:f.notes||'',date:f.date||'',label:f.date?null:'Someday',tone:'ok'}]})}
+else if(s.modal==='car'){this.upd({modal:null,car:{...s.car,...f}})}}
+renderVals(){
+const s=this.state,c=s.car;
+const setF=k=>e=>{const v=e.target.value;this.setState(p=>({f:{...p.f,[k]:v}}))};
+const fx={};['name','cat','expires','notes','title','shop','date','miles','cost','kind'].forEach(k=>fx[k]=setF(k));
+const now=new Date(today()+'T12:00:00');
+const tone=t=>t==='soon'?{bg:'oklch(0.32 0.08 45)',fg:'oklch(0.86 0.1 55)'}:{bg:'oklch(0.26 0.006 85)',fg:'oklch(0.85 0.005 85)'};
+const rem=s.reminders.map(r=>{let label=r.label,t=r.tone||'ok',sort=9e15;
+if(r.date){const days=Math.round((new Date(r.date+'T12:00:00')-now)/864e5);sort=days;label=days<0?'Overdue':days===0?'Today':days<=30?(days+' day'+(days===1?'':'s')):fmtDate(r.date);t=days<=30?'soon':'ok'}else if(t==='soon')sort=-1e9;
+return{...r,label,sort,...tone(t),done:()=>this.upd({done:{...s.done,[r.id]:true}}),undo:()=>{const d={...s.done};delete d[r.id];this.upd({done:d})},remove:()=>this.upd({reminders:s.reminders.filter(x=>x.id!==r.id)})}}).sort((a,b)=>a.sort-b.sort);
+const openR=rem.filter(r=>!s.done[r.id]),doneR=rem.filter(r=>s.done[r.id]);
+const mapDoc=d=>({...d,short:d.short||d.name,metaColor:d.warn?'oklch(0.76 0.13 50)':'oklch(0.7 0.01 85)',open:()=>this.setState({docId:d.id,modal:null})});
+const cats=['All',...CATS].map(x=>({label:x,select:()=>this.setState({cat:x}),bg:x===s.cat?'#e0602c':'oklch(0.21 0.006 85)',fg:x===s.cat?'oklch(0.14 0.01 50)':'oklch(0.85 0.005 85)',border:x===s.cat?'#e0602c':'oklch(0.32 0.006 85)'}));
+const docList=s.docs.filter(d=>s.cat==='All'||d.cat===s.cat).map(mapDoc);
+const pinnedRaw=s.docs.filter(d=>d.pinned);
+const pinned=(pinnedRaw.length?pinnedRaw:s.docs).slice(0,4).map(mapDoc);
+const svcSorted=[...s.service].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+const svc=svcSorted.map((x,i)=>({...x,dateFmt:fmtDate(x.date),milesFmt:x.miles==null?'mileage not recorded':x.miles.toLocaleString('en-US')+' mi',costFmt:x.cost==null?'—':money(x.cost),divider:i?'1px solid oklch(0.26 0.006 85)':'none',remove:()=>this.upd({service:s.service.filter(y=>y.id!==x.id)})}));
+const d=s.docId&&s.docs.find(x=>x.id===s.docId);
+const tabs=[['home','Overview'],['docs','Documents'],['service','Service'],['reminders','Reminders']].map(([id,label])=>({label,go:()=>this.setState({tab:id}),bg:s.tab===id?'oklch(0.26 0.006 85)':'transparent',fg:s.tab===id?'oklch(0.95 0.005 85)':'oklch(0.65 0.01 85)'}));
+const val=(v,ph)=>({v:v||ph,color:v?'oklch(0.95 0.005 85)':'oklch(0.55 0.01 85)'});
+const facts=[{k:'Odometer',...val(c.odometer&&(parseInt(c.odometer).toLocaleString('en-US')+' mi'),'Add mileage')},{k:'VIN',...val(c.vin,'Add VIN')},{k:'Registered through',...val(c.regThrough,'—')},{k:'Insurance',...val(c.insurer,'Add insurer')},{k:'Policy #',...val(c.policy,'Add policy #')},{k:'Est. value',...val(c.value,'—')}];
+const carDefs=[['year','Year','2008'],['name','Make & model','BMW X5'],['trim','Trim','4.8i'],['city','City','Denver, CO'],['plate','Plate','BNEB07'],['vin','VIN','17 characters'],['odometer','Odometer (mi)','e.g. 168000'],['regThrough','Registered through','Jul 31, 2027'],['insurer','Insurer','State Farm'],['policy','Policy #',''],['value','Est. value','']];
+const carFields=carDefs.map(([k,label,ph])=>({label,ph,value:s.f[k]??'',onChange:setF(k)}));
+const fileData=d&&d.file?d.file.data:'';
+const titles={doc:'Add document',service:'Log service',reminder:'Add reminder',car:'Car details'};
+const known=s.service.reduce((a,x)=>a+(x.cost||0),0);
+return{
+tabs,isHome:s.tab==='home',isDocs:s.tab==='docs',isService:s.tab==='service',isReminders:s.tab==='reminders',
+car:c,carTitle:[c.year,c.name].filter(Boolean).join(' '),carSub:[c.year,c.trim,c.city].filter(Boolean).join(' · '),facts,
+upcoming:openR.slice(0,3),pinned,recent:svc.slice(0,3),cats,docList,noDocs:docList.length===0,serviceList:svc,
+spendAll:money(Math.round(known)),visitCount:s.service.length,lastVisit:svc[0]?svc[0].dateFmt:'—',
+openReminders:openR,doneReminders:doneR,hasDone:doneR.length>0,
+goReminders:()=>this.setState({tab:'reminders'}),goDocs:()=>this.setState({tab:'docs'}),goService:()=>this.setState({tab:'service'}),
+preview:d&&d.file?(d.file.type.startsWith('image/')?React.createElement('img',{src:d.file.data,alt:d.name,style:{width:'100%',borderRadius:12,border:'1px solid oklch(0.3 0.006 85)'}}):d.file.type==='application/pdf'?React.createElement('iframe',{src:d.file.data,title:d.name,style:{width:'100%',height:420,border:'1px solid oklch(0.3 0.006 85)',borderRadius:12,background:'white'}}):null):null,
+hasDoc:!!d,doc:d?{...d,fields:(d.fields||[]).map(([k,v],i)=>({k,v,divider:i?'1px solid oklch(0.26 0.006 85)':'none'})),hasUrl:!!d.url,hasFile:!!d.file,fileData,fileName:d.file?d.file.name:'',isImage:!!(d.file&&d.file.type.startsWith('image/')),isPdf:!!(d.file&&d.file.type==='application/pdf'),noFile:!d.file,attachHint:d.url?'The original is attached to the email — download it from Gmail, then add it here':'Photo or PDF, up to 3 MB'}:{fields:[]},
+attachToDoc:e=>this.readFile(e,file=>this.upd({docs:s.docs.map(x=>x.id===s.docId?{...x,file}:x)})),
+deleteDoc:()=>{if(confirm('Delete this document?'))this.upd({docs:s.docs.filter(x=>x.id!==s.docId),docId:null})},
+hasModal:!!s.modal,modalTitle:titles[s.modal]||'',mDoc:s.modal==='doc',mService:s.modal==='service',mReminder:s.modal==='reminder',mCar:s.modal==='car',
+f:s.f,fx,catOptions:CATS,carFields,fileLabel:s.f.file?s.f.file.name:'Attach a photo or PDF',
+pickFile:e=>this.readFile(e,file=>this.setState(p=>({f:{...p.f,file}}))),
+openAddDoc:()=>this.open('doc',{cat:s.cat!=='All'?s.cat:'Insurance'}),
+openAddService:()=>this.open('service',{date:today(),miles:c.odometer||''}),
+openAddReminder:()=>this.open('reminder',{kind:'Service'}),
+openCar:()=>this.open('car',{...c}),
+closeAll:()=>this.setState({modal:null,docId:null}),stop:e=>e.stopPropagation(),save:()=>this.save(),
+saveStatus:s.saved==='full'?'Couldn’t save — storage full':'Saved on this device. Export a backup to keep a copy.',
+exportData:()=>{const {car,docs,service,reminders,done}=s;const b=new Blob([JSON.stringify({car,docs,service,reminders,done},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='glovebox-backup.json';a.click()},
+resetData:()=>{if(confirm('Reset everything to the data found in your email? Your additions will be removed.'))this.upd({...seed()})}
+};}}
+</script>
+</body>
+</html>
