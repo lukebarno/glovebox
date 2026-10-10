@@ -1,0 +1,8 @@
+# Netlify builds the website from the web/ folder.
+[build]
+  base = "web"
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
